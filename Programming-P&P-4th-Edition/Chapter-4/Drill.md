@@ -47,7 +47,7 @@ catch (...) {
 
 #### 4. Fragment 4
 * **Original:** `cout << success << '\n';`
-* **Error:** `success` is treated as an undeclared identifier/variable rather than a string literal.
+* **Error:** `success` is treated as an undeclared variable rather than a string literal.
 * **Correction:**
   ```cpp
   cout << "Success" << '\n';
@@ -71,4 +71,20 @@ catch (...) {
 * **Correction:**
   ```cpp
   vector<int> v(10); v[5] = 7; if (v[5] == 7) cout << "Success!\n";
+  ```
+
+#### 7. Fragment 7
+* **Original:** `if (cond) cout << "Success!\n"; else cout << "Fail!\n";`
+* **Error:** `cond` has not been declared.
+* **Correction:**
+  ```cpp
+  bool cond = true; if (cond) cout << "Success!\n"; else cout << "Fail!\n";
+  ```
+
+#### 8. Fragment 8
+* **Original:** `bool c = false; if (c) cout << "Success!\n"; else cout << "Fail!\n";`
+* **Error:** `c` is initialized to `false`, causing the `else` branch `"Fail!\n"` to execute.
+* **Correction:**
+  ```cpp
+  bool c = true; if (c) cout << "Success!\n"; else cout << "Fail!\n";
   ```
