@@ -39,12 +39,23 @@ I don't know what I'm doing wrong here cause my answer will be redundant, someth
 * **Examples:** Yeah no I'm not giving 3 examples... when your for loop is off by one.
 
 ### [10] List four potential sources of program errors discussed in the text.
+  * Misunderstanding program requirements.
+  * Bad user input.
+  * Unhandled edge cases
+  * Programmer mistakes, including typos, stupid errors, or wrong assumptions about a library function.
 
 ### [11] How do you know if a result is plausible? What techniques do you have to answer such questions?
+  * Asking myself if an answer makes sense (a father can't be younger than his child...)
+  * Drafting estimations on the side
+  * Assertions for sanity checks.
+  * Manually checking output against simple test cases.
 
 ### [12] How do you test if an input operation succeeded?
+  * You check the status of the input stream right after reading into a variable, usually using an if statement like if (cin >> x). If it evaluates to true, the read worked; if false, invalid data or an end-of-file was reached.
 
 ### [13] Compare and contrast having the caller of a function handle a run-time error vs. having the called function handle the run-time error.
+* **Caller handles it:** The function signals an error back to the caller (e.g., via return value or exception). This lets the caller decide what to do using the bigger picture of the application, though it can make calling code cluttered if every call requires checks.
+* **Called function handles it:** The function fixes or stops the program itself. This keeps caller code clean, but the function often lacks the broader context to make the right call for the whole application.
 
 ### [14] When is throwing an exception preferable to returning an "error value"?
 
