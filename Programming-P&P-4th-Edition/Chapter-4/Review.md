@@ -25,3 +25,11 @@ Who's "we", I don't. However, it is annoying, time-consuming, tedious...
 ### [6] What is a syntax error? Give five examples.
 * **Definition:** A violation of the grammar rules of the programming language detected by the compiler.
 * **Examples:** Missing semicolon, mismatched parentheses, misspelled keyword, incorrect capitalization, wrong operator usage.
+
+### [7] What is a type error? Give five examples.
+* **Definition:** An operation performed on data types that are incompatible or invalid without proper conversion.
+I don't know what I'm doing wrong here cause my answer will be redundant, something like: Assigning a string to an int, assigning an int to a string, passing the wrong argument type to a function and so on...
+
+### [8] What is a linker error? Give three examples
+* **Definition:** An error that occurs when the linker cannot combine multiple translation units into one executable source file.
+* **Examples:** Missing definition, double definition and definition mismatch between declaration and definition. 
