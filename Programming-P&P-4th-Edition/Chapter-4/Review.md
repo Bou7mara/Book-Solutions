@@ -10,3 +10,6 @@
 ### [2] What kinds of errors can we ignore in student programs?
 * Hardware failing, operating-system crashing, out of memory states...
 
+### [3] What guarantees should every completed project offer?
+I guess, most importantly, correctness; a program should produce correct results for all legal inputs. It should also give adequate error messages in the case of illegal input, or otherwise fail predictably.
+
