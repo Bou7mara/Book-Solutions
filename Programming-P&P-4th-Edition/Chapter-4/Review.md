@@ -7,3 +7,6 @@
 * **Run-time errors:** Errors found while the program is running: division by zero, out-of-bounds access, hardware exceptions...
 * **Logic errors:** Errors caused by flawed logic where the code runs without crashing but produces incorrect results.
 
+### [2] What kinds of errors can we ignore in student programs?
+* Hardware failing, operating-system crashing, out of memory states...
+
