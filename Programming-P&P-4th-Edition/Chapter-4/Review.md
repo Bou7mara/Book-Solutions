@@ -22,3 +22,6 @@ I feel like I was reaching with these answers, so take this with a grain of salt
 ### [5] Why do we hate debugging.
 Who's "we", I don't. However, it is annoying, time-consuming, tedious...
 
+### [6] What is a syntax error? Give five examples.
+* **Definition:** A violation of the grammar rules of the programming language detected by the compiler.
+* **Examples:** Missing semicolon, mismatched parentheses, misspelled keyword, incorrect capitalization, wrong operator usage.
