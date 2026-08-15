@@ -58,25 +58,62 @@ I don't know what I'm doing wrong here cause my answer will be redundant, someth
 * **Called function handles it:** The function fixes or stops the program itself. This keeps caller code clean, but the function often lacks the broader context to make the right call for the whole application.
 
 ### [14] When is throwing an exception preferable to returning an "error value"?
+* When returning an error code would ruin the function's return type or interfere with valid return values.
+* When the error needs to be handled multiple levels up the call stack rather than right away.
+* When an error happens inside a class constructor, which cannot return a value.
 
 ### [15] When is returning an "error value" preferable to throwing an exception?
+* When an error is an expected, common event during normal use (like hitting the end of a file).
+* In fast, inner loops where the overhead of throwing an exception would slow things down.
+* When writing or interfacing with simple C-style code where exceptions aren't supported.
 
 ### [16] Describe the process of how exceptions are thrown and caught.
+1. **Throwing:** Code detects a problem it can't handle and calls `throw` with an error object.
+2. **Unwinding:** The program pauses current work and travels back up through calling functions searching for a matching `try/catch` block, cleaning up local variables on the way back.
+3. **Catching:** Execution jumps into the matching `catch` block to deal with the problem.
 
 ### [17] Why, with a vector called `v`, is `v[v.size()]` a range error? What would be the result of calling this?
+* **Why:** Vectors use zero-based indexing, meaning valid positions go from `0` to `v.size() - 1`. The index `v.size()` points to the position just after the last element, which doesn't exist.
+* **Result:** Using `v[v.size()]` tries to read memory outside the vector, causing unpredictable behavior (or throwing an exception if accessed via `.at()`).
 
 ### [18] What is an assertion?
+* An explicit check in your code stating "this condition must be true right here". If the check fails, the program immediately halts and prints an error message to alert you during development.
 
 ### [19] Define *precondition* and *postcondition*; give an example (that is not the `area()` function from this chapter), preferably a computation that requires a loop.
+* **Precondition:** What must be true *before* a function runs for it to work correctly.
+* **Postcondition:** What the function promises will be true *after* it finishes running.
+* **Example:**
+  ```cpp
+  // Precondition: v is not empty; target exists in range.
+  // Postcondition: Returns index 'i' such that v[i] == target, or -1 if not found.
+  int find_first_index(const std::vector<int>& v, int target) {
+      if (v.empty()) return -1;
+
+      for (int i = 0; i < v.size(); ++i) {
+          if (v[i] == target) return i;
+      }
+      return -1;
+  }
+  ```
 
 ### [20] When would you *not* test a precondition?
+* When checking it takes too much time or computing power (e.g., checking if a list is sorted before running a binary search).
+* In small helper functions where the calling function already checked the inputs.
+* In performance-critical loops where every microsecond matters and you know the input is already safe.
 
 ### [21] When would you *not* test a postcondition?
+* When verifying the result requires repeating the entire calculation, doubling the work.
+* When the outcome is already obvious or guaranteed by the compiler and language rules.
 
 ### [22] What are the steps in debugging a program?
+1. **Reproduce:** Find a clear, repeatable set of steps that triggers the bug.
+2. **Isolate:** Narrow down the exact lines of code causing the issue.
+3. **Understand:** Figure out why the code is behaving differently than expected.
+4. **Fix & Test:** Apply a fix and run tests to make sure you solved the bug without creating new ones.
 
 ### [23] Why does commenting help when debugging?
-
+* Temporarily commenting out chunks of code lets you test parts of your program in isolation to locate where things break.
+* Explaining what your code is supposed to do in comments forces you to rethink the logic, making mistakes easier to spot.
 ### [24] How does testing differ from debugging?
 * Debugging is locating, diagnosing and fixing the errors, while testing is executing code with different inputs to verify how correct the code is. I guess testing helps us figure out if the code as a whole works correctly with a certain input, which then lets us know that there is (or isn't) an error somewhere
   
