@@ -13,3 +13,12 @@
 ### [3] What guarantees should every completed project offer?
 I guess, most importantly, correctness; a program should produce correct results for all legal inputs. It should also give adequate error messages in the case of illegal input, or otherwise fail predictably.
 
+### [4] List three approaches we can take to eliminate errors in programs and produce acceptable software.
+I feel like I was reaching with these answers, so take this with a grain of salt.
+* **Organize the code:** Structuring the code in a way that isn't error prone, although terrible for job security ;), makes it significantly harder for bugs to hide in code. This involves good documentation, comments, and small functions that perform one logical task.
+* **Debugging and testing:** Through trial and error, one can eliminate most bugs in their software.
+* **Assertions:** Embedding run-time checks within the code will help locate errors.
+
+### [5] Why do we hate debugging.
+Who's "we", I don't. However, it is annoying, time-consuming, tedious...
+
