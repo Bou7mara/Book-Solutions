@@ -1,1 +1,2322 @@
+\documentclass[12pt,a4paper]{article}
 
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=0pt]{geometry}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{microtype}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{etoolbox}
+\usepackage[hidelinks,linktoc=all]{hyperref}
+
+% Give every manually added table-of-contents entry its own link target.
+\pretocmd{\addcontentsline}{\phantomsection}{}{}
+
+% Cover palette
+\definecolor{accentgold}{HTML}{d4a94c}
+\definecolor{coverdark}{HTML}{0d1117}
+\definecolor{coverlight}{HTML}{21262d}
+\definecolor{subtlewhite}{HTML}{c9d1d9}
+\definecolor{dimwhite}{HTML}{8b949e}
+\definecolor{sectionnavy}{HTML}{1e3a5f}
+
+\lstset{
+  language=C++,
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\bfseries\color{sectionnavy},
+  commentstyle=\itshape\color{dimwhite},
+  frame=single,
+  rulecolor=\color{black!25},
+  backgroundcolor=\color{black!2},
+  breaklines=true,
+  showstringspaces=false,
+  columns=fullflexible,
+  keepspaces=true
+}
+
+% Keep code blocks intact; if one does not fit, move it to the next page.
+\BeforeBeginEnvironment{lstlisting}{%
+  \par\noindent\begin{minipage}{\linewidth}%
+}
+\AfterEndEnvironment{lstlisting}{%
+  \end{minipage}\par
+}
+
+\pagestyle{empty}
+
+\begin{document}
+
+% ----------------------- COVER PAGE -----------------------
+\pagenumbering{gobble}
+\pagecolor{coverdark}
+
+\begin{tikzpicture}[remember picture, overlay]
+
+  % ===== BACKGROUND LAYERS =====
+  % Subtle top-to-bottom gradient
+  \shade[top color=coverlight, bottom color=coverdark, opacity=0.6]
+    (current page.south west) rectangle (current page.north east);
+
+
+
+  % ===== MAIN TEXT CONTENT =====
+
+  % — top accent line —
+  \draw[accentgold, line width=0.8pt, opacity=0.4]
+    ([yshift=-3.0cm, xshift=-4cm]current page.north)
+    -- ++(8cm, 0);
+
+  % — subtitle —
+  \node[anchor=center, text=accentgold, font=\fontsize{11}{14}\selectfont]
+    at ([yshift=-3.7cm]current page.north)
+    {\textls[200]{THE COMPLETE SOLUTIONS MANUAL}};
+
+  % — second accent line —
+  \draw[accentgold, line width=0.4pt, opacity=0.25]
+    ([yshift=-4.3cm, xshift=-3cm]current page.north)
+    -- ++(6cm, 0);
+
+  % — main title (two lines) —
+  \node[anchor=center, text=white,
+        font=\fontsize{36}{44}\selectfont\bfseries,
+        align=center]
+    at ([yshift=-7.3cm]current page.north)
+    {Data Structures \&\\[6pt] Algorithm Analysis in C++};
+
+  % — textbook author —
+  \node[anchor=center, text=dimwhite,
+        font=\fontsize{14}{18}\selectfont\itshape]
+    at ([yshift=-10.0cm]current page.north)
+    {by Mark Allen Weiss};
+
+  % — decorative diamond —
+  \node[anchor=center, text=accentgold, opacity=0.5,
+        font=\fontsize{10}{10}\selectfont]
+    at ([yshift=-11.3cm]current page.north)
+    {$\diamond$};
+
+  % — chapter block (no frame) —
+  \node[anchor=center, text=accentgold,
+        font=\fontsize{22}{26}\selectfont\bfseries]
+    at ([yshift=-13.3cm]current page.north)
+    {Chapter 2};
+  \node[anchor=center, text=subtlewhite,
+        font=\fontsize{18}{22}\selectfont]
+    at ([yshift=-14.4cm]current page.north)
+    {Algorithm Analysis};
+
+  % — asymptotic-complexity motif —
+  \begin{scope}[
+      shift={(current page.south)},
+      yshift=8.4cm,
+      x=1.12cm,
+      y=1.12cm,
+      scale=1.5,
+      transform shape
+    ]
+    % Large, quiet Big-O watermark
+    \node[text=accentgold, opacity=0.045,
+          font=\fontsize{92}{92}\selectfont\bfseries]
+      at (0,0.35) {$\mathcal{O}$};
+
+    % Axes
+    \draw[->, subtlewhite, opacity=0.42, line width=0.65pt]
+      (-3.5,-1.15) -- (3.65,-1.15)
+      node[below left=1pt, opacity=0.85,
+           font=\scriptsize\itshape] {$n$};
+    \draw[->, subtlewhite, opacity=0.42, line width=0.65pt]
+      (-3.5,-1.15) -- (-3.5,1.85)
+      node[above right=1pt, opacity=0.85,
+           font=\scriptsize\itshape] {$T(n)$};
+
+    % Growth-rate curves
+    \begin{scope}[shift={(-3.5,-1.15)}]
+      \draw[subtlewhite, opacity=0.45, line width=1.15pt,
+            domain=0.12:7.0, samples=70, smooth]
+        plot (\x,{0.34*ln(1+1.25*\x)});
+      \node[anchor=west, text=subtlewhite, opacity=0.62,
+            font=\scriptsize]
+        at (5.55,0.48) {$\log n$};
+
+      \draw[accentgold, opacity=0.62, line width=1.25pt,
+            domain=0:6.6, samples=2]
+        plot (\x,{0.22*\x});
+      \node[anchor=west, text=accentgold, opacity=0.78,
+            font=\scriptsize]
+        at (5.55,0.98) {$n$};
+
+      \draw[accentgold, opacity=0.82, line width=1.45pt,
+            domain=0.12:6.17, samples=70, smooth]
+        plot (\x,{0.16*\x*ln(1+\x)});
+      \node[anchor=west, text=accentgold, opacity=0.9,
+            font=\scriptsize]
+        at (4.62,1.82) {$n\log n$};
+
+      \draw[accentgold, opacity=0.95, line width=1.55pt,
+            domain=0:5.15, samples=70, smooth]
+        plot (\x,{0.105*\x*\x});
+      \node[anchor=west, text=accentgold,
+            font=\scriptsize\bfseries]
+        at (4.18,2.30) {$n^2$};
+
+    \end{scope}
+  \end{scope}
+
+  % — bottom section —
+  % Author name
+  \node[anchor=center, text=subtlewhite,
+        font=\fontsize{16}{20}\selectfont]
+    at ([yshift=4.5cm]current page.south)
+    {Ahmed Amine Azzouzi};
+
+  % Bottom accent line
+  \draw[accentgold, line width=0.6pt, opacity=0.3]
+    ([yshift=3.5cm, xshift=-2.5cm]current page.south)
+    -- ++(5cm, 0);
+
+  % Small year tag
+  \node[anchor=center, text=dimwhite, opacity=0.5,
+        font=\fontsize{9}{12}\selectfont]
+    at ([yshift=2.8cm]current page.south)
+    {\textls[150]{2026}};
+
+\end{tikzpicture}
+
+% Supply a real page box for the overlay.
+\null
+
+% -------------------- TABLE OF CONTENTS --------------------
+\clearpage
+\newgeometry{margin=2.5cm}
+\pagecolor{white}
+\color{black}
+\pagestyle{plain}
+\pagenumbering{roman}
+\setcounter{page}{1}
+
+\tableofcontents
+
+% ------------------------- EXERCISES ------------------------
+\clearpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+\noindent
+{\color{accentgold}\rule{\linewidth}{0.7pt}}
+\vspace{1.2em}
+
+\subsection*{\color{sectionnavy}Exercise 2.1}
+\addcontentsline{toc}{subsection}{Exercise 2.1: Ordering asymptotic growth rates}
+
+\noindent
+Order the following functions by growth rate:
+$N$, $\sqrt{N}$, $N^{1.5}$, $N^2$, $N\log N$,
+$N\log\log N$, $N\log^2 N$, $N\log(N^2)$,
+$2/N$, $2^N$, $2^{N/2}$, $37$, $N^2\log N$, and $N^3$.
+Indicate which functions grow at the same rate.
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+As $N\to\infty$, the functions are ordered from slowest to fastest as
+follows, where $f\prec g$ means that $f=o(g)$, and $f\asymp g$ means that $f=\Theta(g)$:
+\[
+\begin{aligned}
+\frac{2}{N}
+&\prec 37
+ \prec \sqrt{N}
+ \prec N
+ \prec N\log\log N \\
+&\prec N\log N
+ \asymp N\log(N^2)
+ \prec N(\log N)^2
+ \prec N^{1.5} \\
+&\prec N^2
+ \prec N^2\log N
+ \prec N^3
+ \prec 2^{N/2}
+ \prec 2^N.
+\end{aligned}
+\]
+
+The only functions in the list that grow at the same asymptotic rate are
+$N\log N$ and $N\log(N^2)$, since
+\[
+N\log(N^2)=2N\log N=\Theta(N\log N).
+\]
+
+\subsection*{\color{sectionnavy}Exercise 2.2}
+\addcontentsline{toc}{subsection}{Exercise 2.2: Properties of Big-Oh bounds}
+
+\noindent
+Suppose $T_1(N)=O(f(N))$ and $T_2(N)=O(f(N))$. Which of the following
+are true?
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+  \item $T_1(N)+T_2(N)=O(f(N))$
+  \item $T_1(N)-T_2(N)=o(f(N))$
+  \item $\dfrac{T_1(N)}{T_2(N)}=O(1)$
+  \item $T_1(N)=O(T_2(N))$
+\end{enumerate}
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+
+  \item \textbf{True.}
+  If $T_1(N)\leq c_1f(N)$ and $T_2(N)\leq c_2f(N)$ for sufficiently
+  large $N$, then
+  \[
+    T_1(N)+T_2(N)\leq (c_1+c_2)f(N).
+  \]
+
+  \item \textbf{False.}
+  For example, let $T_1(N)=2f(N)$ and $T_2(N)=f(N)$. Their difference
+  is $f(N)$, which is not $o(f(N))$.
+
+  \item \textbf{False.}
+  Both functions can be bounded above by $f(N)$ while having very
+  different sizes. For example, if $f(N)=N$, $T_1(N)=N$, and
+  $T_2(N)=1$, then $T_1(N)/T_2(N)=N$, which is not $O(1)$.
+
+  \item \textbf{False.}
+  Using the same example, $T_1(N)=N$ is not $O(T_2(N))=O(1)$.
+\end{enumerate}
+
+Therefore, only statement~\textbf{(a)} is necessarily true.
+
+\subsection*{\color{sectionnavy}Exercise 2.3}
+\addcontentsline{toc}{subsection}{Exercise 2.3: Comparing two growth rates}
+
+\noindent
+Which function grows faster: $N\log N$ or
+$N^{1+\varepsilon/\sqrt{\log N}}$, $\varepsilon>0$?
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+Consider their ratio:
+\[
+\frac{N^{1+\varepsilon/\sqrt{\log N}}}{N\log N}
+=
+\frac{N^{\varepsilon/\sqrt{\log N}}}{\log N}.
+\]
+Using natural logarithms (a different fixed base changes only a positive
+constant), this becomes
+\[
+\frac{e^{\varepsilon\sqrt{\log N}}}{\log N}.
+\]
+Its logarithm is
+\[
+\varepsilon\sqrt{\log N}-\log\log N,
+\]
+which tends to infinity because $\sqrt{\log N}$ grows faster than
+$\log\log N$. Therefore,
+\[
+N^{1+\varepsilon/\sqrt{\log N}}
+=\omega(N\log N),
+\]
+so $N^{1+\varepsilon/\sqrt{\log N}}$ grows faster.
+
+\subsection*{\color{sectionnavy}Exercise 2.4}
+\addcontentsline{toc}{subsection}{Exercise 2.4: Logarithms versus linear growth}
+
+\noindent
+Prove that for any constant $k$, $\log^k N=o(N)$.
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+Let $x=\log N$. The base of the logarithm affects only a constant
+factor, so we may use the natural logarithm. Then $N=e^x$, and
+\[
+\frac{\log^k N}{N}=\frac{x^k}{e^x}.
+\]
+Choose an integer $m>k$. From the power-series expansion of $e^x$,
+for $x>0$ we have
+\[
+e^x\geq \frac{x^m}{m!}.
+\]
+Consequently,
+\[
+0\leq \frac{x^k}{e^x}
+\leq \frac{m!}{x^{m-k}}
+\longrightarrow 0
+\qquad\text{as }x\to\infty.
+\]
+Therefore,
+\[
+\lim_{N\to\infty}\frac{\log^k N}{N}=0,
+\]
+which proves that $\log^k N=o(N)$ for every fixed constant $k$.
+
+\subsection*{\color{sectionnavy}Exercise 2.5}
+\addcontentsline{toc}{subsection}{Exercise 2.5: Incomparable asymptotic functions}
+
+\noindent
+Find two functions $f(N)$ and $g(N)$ such that neither
+$f(N)=O(g(N))$ nor $g(N)=O(f(N))$.
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+Define
+\[
+f(N)=
+\begin{cases}
+N,   & \text{if $N$ is even},\\
+N^2, & \text{if $N$ is odd},
+\end{cases}
+\qquad
+g(N)=
+\begin{cases}
+N^2, & \text{if $N$ is even},\\
+N,   & \text{if $N$ is odd}.
+\end{cases}
+\]
+For odd $N$,
+\[
+\frac{f(N)}{g(N)}=N,
+\]
+which is unbounded. Hence $f(N)\neq O(g(N))$. On the other hand, for
+even $N$,
+\[
+\frac{g(N)}{f(N)}=N,
+\]
+which is also unbounded. Hence $g(N)\neq O(f(N))$. Therefore, neither
+function asymptotically dominates the other.
+
+\subsection*{\color{sectionnavy}Exercise 2.6}
+\addcontentsline{toc}{subsection}{Exercise 2.6: A repeatedly squared fine}
+
+\noindent
+In a recent court case, a judge cited a city for contempt and ordered a
+fine of \$2 for the first day. Each subsequent day, until the city
+followed the judge's order, the fine was squared (i.e., the fine
+progressed as follows: \$2, \$4, \$16, \$256, \$65{,}536, \ldots).
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+  \item What would be the fine on day $N$?
+  \item How many days would it take for the fine to reach $D$ dollars
+  (a Big-Oh answer will do)?
+\end{enumerate}
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+Let $F_N$ be the fine on day $N$. The rule gives
+\[
+F_1=2,
+\qquad
+F_N=F_{N-1}^2.
+\]
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+
+  \item The exponent of $2$ doubles each day:
+  \[
+  F_1=2^1,\quad F_2=2^2,\quad F_3=2^4,\quad F_4=2^8.
+  \]
+  Therefore, the fine on day $N$ is
+  \[
+  \boxed{F_N=2^{2^{N-1}}}.
+  \]
+
+  \item To find the first day on which the fine is at least $D$, solve
+  \[
+  2^{2^{N-1}}\geq D.
+  \]
+  Taking the base-$2$ logarithm twice gives
+  \[
+  N-1\geq \log_2\log_2 D.
+  \]
+  Thus, for $D\geq2$, the first such day is
+  \[
+  \boxed{N=1+\left\lceil\log_2\log_2 D\right\rceil},
+  \]
+  and the number of days is $\Theta(\log\log D)$.
+\end{enumerate}
+
+\clearpage
+\subsection*{\color{sectionnavy}Exercise 2.7}
+\addcontentsline{toc}{subsection}{Exercise 2.7: Analyzing nested-loop fragments}
+
+\noindent
+For each of the following six program fragments:
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+  \item Give an analysis of the running time (Big-Oh will do).
+  \item Implement the code in the language of your choice, and give the
+  running time for several values of $N$.
+  \item Compare your analysis with the actual running times.
+\end{enumerate}
+
+\begin{lstlisting}
+// (1)
+sum = 0;
+for (i = 0; i < n; ++i)
+    ++sum;
+
+// (2)
+sum = 0;
+for (i = 0; i < n; ++i)
+    for (j = 0; j < n; ++j)
+        ++sum;
+
+// (3)
+sum = 0;
+for (i = 0; i < n; ++i)
+    for (j = 0; j < n * n; ++j)
+        ++sum;
+
+// (4)
+sum = 0;
+for (i = 0; i < n; ++i)
+    for (j = 0; j < i; ++j)
+        ++sum;
+
+// (5)
+sum = 0;
+for (i = 0; i < n; ++i)
+    for (j = 0; j < i * i; ++j)
+        for (k = 0; k < j; ++k)
+            ++sum;
+
+// (6)
+sum = 0;
+for (i = 1; i < n; ++i)
+    for (j = 1; j < i * i; ++j)
+        if (j % i == 0)
+            for (k = 0; k < j; ++k)
+                ++sum;
+\end{lstlisting}
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+\paragraph{Running-time analysis.}
+Counting executions of the innermost statement gives:
+
+\begin{enumerate}
+  \item[(1)] The loop executes $N$ times, so the running time is
+  $\Theta(N)$.
+
+  \item[(2)] Each of the two loops executes $N$ times, giving
+  $N^2$ increments and a running time of $\Theta(N^2)$.
+
+  \item[(3)] The inner loop executes $N^2$ times for each of $N$ outer
+  iterations. Thus the running time is $\Theta(N^3)$.
+
+  \item[(4)] The number of increments is
+  \[
+    \sum_{i=0}^{N-1}i=\frac{N(N-1)}{2},
+  \]
+  so the running time is $\Theta(N^2)$.
+
+  \item[(5)] For a fixed $i$, the innermost statement executes
+  \[
+    \sum_{j=0}^{i^2-1}j=\frac{i^2(i^2-1)}{2}=\Theta(i^4)
+  \]
+  times. Summing over $i$ gives
+  $\Theta(\sum_{i=0}^{N-1}i^4)=\Theta(N^5)$.
+
+  \item[(6)] For a fixed $i$, the condition succeeds when $j=mi$ for
+  $m=1,\ldots,i-1$. The innermost statement therefore executes
+  \[
+    \sum_{m=1}^{i-1}mi
+    =\frac{i^2(i-1)}{2}
+    =\Theta(i^3)
+  \]
+  times. Summing over $i$ gives $\Theta(N^4)$. The $\Theta(N^3)$
+  condition checks do not change this bound.
+\end{enumerate}
+
+Hence the six bounds are
+\[
+\boxed{\Theta(N),\ \Theta(N^2),\ \Theta(N^3),\
+       \Theta(N^2),\ \Theta(N^5),\ \Theta(N^4)}.
+\]
+
+\paragraph{C++ implementation.}
+The following functions were timed separately. A volatile accumulator is
+used so that an optimizing compiler cannot remove the loops.
+
+\begin{lstlisting}
+#include <cstdint>
+
+volatile std::uint64_t sum;
+
+void fragment1(int n) {
+    sum = 0;
+    for (int i = 0; i < n; ++i) ++sum;
+}
+
+void fragment2(int n) {
+    sum = 0;
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < n; ++j) ++sum;
+}
+
+void fragment3(int n) {
+    sum = 0;
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < n * n; ++j) ++sum;
+}
+
+void fragment4(int n) {
+    sum = 0;
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < i; ++j) ++sum;
+}
+
+void fragment5(int n) {
+    sum = 0;
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < i * i; ++j)
+            for (int k = 0; k < j; ++k) ++sum;
+}
+
+void fragment6(int n) {
+    sum = 0;
+    for (int i = 1; i < n; ++i)
+        for (int j = 1; j < i * i; ++j)
+            if (j % i == 0)
+                for (int k = 0; k < j; ++k) ++sum;
+}
+\end{lstlisting}
+
+\paragraph{Representative timings.}
+The benchmark was compiled with Microsoft Visual C++ in Release x64 mode
+and run on an Intel Core i7-13700HX. The following filtered measurements
+are in microseconds. Absolute times depend on the machine; the scaling
+ratios are the important part.
+
+\begin{center}
+\begin{tabular}{c|r|r|r|r|r|r}
+$N$ & \textbf{F1} & \textbf{F2} & \textbf{F3} &
+\textbf{F4} & \textbf{F5} & \textbf{F6} \\
+\hline
+10 & 0.0073 & 0.1450 & 1.0190 & 0.0438 & 14.4 & 2.1 \\
+20 & 0.0117 & 0.1256 & 3.2540 & 0.3083 & 174.9 & 15.1 \\
+30 & 0.0161 & 0.3765 & 7.1690 & 0.4341 & 640.9 & 79.7 \\
+40 & 0.0190 & 0.8298 & 14.401 & 0.7059 & 3{,}782.3 & 113.6 \\
+50 & 0.0261 & 0.6919 & 26.805 & 0.8927 & 8{,}979.9 & 224.6
+\end{tabular}
+\end{center}
+
+\paragraph{Doubling-ratio comparison.}
+For a running time of order $N^k$, doubling $N$ should multiply the time
+by approximately $2^k$. Selected stable measurements from the scaling
+benchmark are shown below.
+
+\begin{center}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{c|c|c|c|c|c}
+\textbf{Fragment} & \textbf{Complexity} & $N\to2N$ &
+\textbf{Time ($\mu$s)} & \textbf{Observed} & \textbf{Expected} \\
+\hline
+1 & $\Theta(N)$   & 200k$\to$400k & 41.70$\to$84.00 & 2.01 & 2 \\
+2 & $\Theta(N^2)$ & 4k$\to$8k     & 3{,}385.1$\to$13{,}556.1 & 4.00 & 4 \\
+3 & $\Theta(N^3)$ & 400$\to$800   & 13{,}819.2$\to$108{,}560.0 & 7.86 & 8 \\
+4 & $\Theta(N^2)$ & 4k$\to$8k     & 1{,}728.5$\to$6{,}988.2 & 4.04 & 4 \\
+5 & $\Theta(N^5)$ & 40$\to$80     & 3{,}034.5$\to$84{,}129.0 & 27.72 & 32 \\
+6 & $\Theta(N^4)$ & 40$\to$80     & 119.3$\to$1{,}936.3 & 16.23 & 16
+\end{tabular}%
+}
+\end{center}
+
+Fragments (1)--(4) and (6) closely match their theoretical doubling
+factors. Fragment (5) is somewhat below the ideal factor of $32$ at the
+tested sizes, but its much steeper scaling is consistent with
+$\Theta(N^5)$. Timer resolution, caching, processor scheduling, and
+compiler effects explain the remaining variation. Overall, the
+i7-13700HX measurements support all six asymptotic bounds.
+
+\clearpage
+\subsection*{\color{sectionnavy}Exercise 2.8}
+\addcontentsline{toc}{subsection}{Exercise 2.8: Random permutation algorithms}
+
+\noindent
+Suppose that we need to generate a random permutation of the first $N$
+integers. For example, $\{4,3,1,5,2\}$ and $\{3,1,4,2,5\}$ are legal
+permutations, whereas $\{5,4,1,2,1\}$ is not. Assume that
+\texttt{randInt(i,j)} generates every integer between $i$ and $j$ with
+equal probability. Consider the following algorithms.
+
+\begin{enumerate}
+  \item Fill $a[0]$ through $a[N-1]$. To fill $a[i]$, generate random
+  integers until one is obtained that does not already occur in
+  $a[0],\ldots,a[i-1]$.
+
+  \item Proceed as in algorithm (1), but maintain a Boolean array
+  \texttt{used}. When a value is inserted, mark it as used, allowing
+  membership to be tested in constant time.
+
+  \item First set $a[i]=i+1$, and then execute
+\begin{lstlisting}
+for (int i = 1; i < n; ++i)
+    swap(a[i], a[randInt(0, i)]);
+\end{lstlisting}
+\end{enumerate}
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+  \item Prove that all three algorithms produce only legal
+  permutations and that all permutations are equally likely.
+  \item Give as accurate a Big-Oh analysis as possible for the expected
+  running time of each algorithm.
+  \item Implement each algorithm, run it ten times for the requested
+  values of $N$, and compute the average running times.
+  \item Compare the analysis with the measured running times.
+  \item Give the worst-case running time of each algorithm.
+\end{enumerate}
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+\paragraph{(a) Correctness and uniformity.}
+Algorithms (1) and (2) accept only values not already present in the
+array, so their outputs are legal permutations. When $i$ positions have
+been filled, rejection sampling makes each of the $N-i$ unused values
+equally likely to be selected next. Consequently, every particular
+permutation has probability
+\[
+\frac1N\cdot\frac1{N-1}\cdots\frac11=\frac1{N!}.
+\]
+
+Algorithm (3) is the forward Fisher--Yates shuffle. After iteration $i$,
+the prefix $a[0],\ldots,a[i]$ is a uniformly random permutation of its
+$i+1$ values. This is true initially, and choosing the swap position
+uniformly from $0$ through $i$ preserves the claim inductively. After
+the final iteration, every one of the $N!$ permutations therefore has
+probability $1/N!$.
+
+\paragraph{(b) Expected running times.}
+For algorithms (1) and (2), when $i$ positions have been filled, a
+random draw succeeds with probability $(N-i)/N$. The expected number of
+draws is therefore
+\[
+\frac{N}{N-i}.
+\]
+
+In algorithm (1), a successful membership search examines all $i$
+existing entries. The expected number of failed draws is $i/(N-i)$,
+and a failed search examines $(i+1)/2$ entries on average. Thus the
+expected work at position $i$ is
+\[
+i+\frac{i}{N-i}\frac{i+1}{2}.
+\]
+Summing this expression gives
+\[
+\boxed{\mathbb{E}[T_1(N)]=\Theta(N^2\log N)}.
+\]
+
+Algorithm (2) tests \texttt{used} in constant time, so its expected
+number of random draws is
+\[
+\sum_{i=0}^{N-1}\frac{N}{N-i}
+=N\sum_{r=1}^{N}\frac1r
+=NH_N.
+\]
+Therefore,
+\[
+\boxed{\mathbb{E}[T_2(N)]=\Theta(N\log N)}.
+\]
+
+Algorithm (3) performs $N$ initial assignments and exactly $N-1$
+swaps, giving
+\[
+\boxed{T_3(N)=\Theta(N)}.
+\]
+
+\paragraph{(c) C++ implementation.}
+The following implementations use the standard Mersenne Twister random
+number generator.
+
+\begin{lstlisting}
+#include <algorithm>
+#include <numeric>
+#include <random>
+#include <vector>
+
+std::vector<int> permutation1(int n, std::mt19937& rng) {
+    std::vector<int> a(n);
+    std::uniform_int_distribution<int> pick(1, n);
+    for (int i = 0; i < n; ++i) {
+        while (true) {
+            int value = pick(rng);
+            bool duplicate = false;
+            for (int j = 0; j < i; ++j)
+                if (a[j] == value) {
+                    duplicate = true;
+                    break;
+                }
+            if (!duplicate) {
+                a[i] = value;
+                break;
+            }
+        }
+    }
+    return a;
+}
+
+std::vector<int> permutation2(int n, std::mt19937& rng) {
+    std::vector<int> a(n);
+    std::vector<bool> used(n + 1, false);
+    std::uniform_int_distribution<int> pick(1, n);
+    for (int i = 0; i < n; ++i) {
+        int value;
+        do {
+            value = pick(rng);
+        } while (used[value]);
+        a[i] = value;
+        used[value] = true;
+    }
+    return a;
+}
+
+std::vector<int> permutation3(int n, std::mt19937& rng) {
+    std::vector<int> a(n);
+    std::iota(a.begin(), a.end(), 1);
+    for (int i = 1; i < n; ++i) {
+        std::uniform_int_distribution<int> pick(0, i);
+        std::swap(a[i], a[pick(rng)]);
+    }
+    return a;
+}
+\end{lstlisting}
+
+Each function was executed ten times for each input size. The following
+table reports the average elapsed time in milliseconds from a
+representative optimized C++17 run.
+
+\begin{center}
+\begin{tabular}{c|r|r}
+\textbf{Algorithm} & $N$ & \textbf{Average time (ms)} \\
+\hline
+1 & 250   & 0.069 \\
+1 & 500   & 0.307 \\
+1 & 1{,}000 & 1.198 \\
+1 & 2{,}000 & 4.380 \\
+\hline
+2 & 25{,}000  & 1.501 \\
+2 & 50{,}000  & 2.845 \\
+2 & 100{,}000 & 6.255 \\
+2 & 200{,}000 & 13.439 \\
+2 & 400{,}000 & 28.003 \\
+2 & 800{,}000 & 67.784 \\
+\hline
+3 & 100{,}000   & 0.494 \\
+3 & 200{,}000   & 1.035 \\
+3 & 400{,}000   & 2.078 \\
+3 & 800{,}000   & 4.441 \\
+3 & 1{,}600{,}000 & 10.133 \\
+3 & 3{,}200{,}000 & 24.167 \\
+3 & 6{,}400{,}000 & 76.557
+\end{tabular}
+\end{center}
+
+\paragraph{(d) Comparison.}
+Algorithm (1) becomes expensive at only a few thousand elements, and
+its time increases by roughly a factor of four to five when $N$ doubles,
+consistent with $\Theta(N^2\log N)$. Algorithm (2) grows a little more
+than linearly when $N$ doubles, as predicted by $\Theta(N\log N)$.
+Algorithm (3) shows approximately linear scaling until memory-allocation
+and cache effects become significant at the largest inputs. The
+measurements therefore agree with the expected-time analysis.
+
+\paragraph{(e) Worst-case running times.}
+Algorithms (1) and (2) use rejection sampling. An unlucky random-number
+sequence can repeatedly generate an already-used value indefinitely, so
+neither algorithm has a finite worst-case running-time bound. Their
+worst-case running time is unbounded. Algorithm (3) always performs the
+same number of assignments and swaps, so its worst-case time is
+$\Theta(N)$.
+
+\subsection*{\color{sectionnavy}Exercise 2.9}
+\addcontentsline{toc}{subsection}{Exercise 2.9: Extrapolating algorithm runtimes}
+
+\noindent
+Complete the table in Figure 2.2 with estimates for the running times
+that were too long to simulate. Interpolate the running times for these
+algorithms and estimate the time required to compute the maximum
+subsequence sum of one million numbers. What assumptions have you made?
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+For a tenfold increase in input size, the expected multiplication
+factors are
+\[
+10^3=1000,\qquad 10^2=100,\qquad
+10\left(1+\frac{\log 10}{\log N}\right),\qquad 10
+\]
+for Algorithms 1 through 4, respectively. Applying these factors to the
+most recent available measurements gives the completed table below.
+Times are in seconds; the entries marked with an asterisk are estimates.
+
+\begin{center}
+\small
+\begin{tabular}{r|r|r|r|r}
+\textbf{Input size} & \textbf{Alg. 1} & \textbf{Alg. 2} &
+\textbf{Alg. 3} & \textbf{Alg. 4} \\
+ & $O(N^3)$ & $O(N^2)$ & $O(N\log N)$ & $O(N)$ \\
+\hline
+100       & 0.000159 & 0.000006 & 0.000005 & 0.000002 \\
+1{,}000   & 0.095857 & 0.000371 & 0.000060 & 0.000022 \\
+10{,}000  & 86.67    & 0.033322 & 0.000619 & 0.000222 \\
+100{,}000 & 86{,}670$^{*}$ & 3.33 & 0.006700 & 0.002205 \\
+1{,}000{,}000 & 86{,}670{,}000$^{*}$ & 333$^{*}$ &
+0.074870 & 0.022711
+\end{tabular}
+\end{center}
+
+For one million numbers, the estimated running times are therefore
+\[
+\begin{array}{c|c|c}
+\text{Algorithm} & \text{Seconds} & \text{More readable form} \\
+\hline
+1 & 86{,}670{,}000 & \text{about }1{,}003\text{ days, or }2.75\text{ years} \\
+2 & 333 & \text{about }5.55\text{ minutes} \\
+3 & 0.074870 & \text{about }74.9\text{ ms} \\
+4 & 0.022711 & \text{about }22.7\text{ ms}
+\end{array}
+\]
+
+As a check on the interpolation, Algorithm 3 predicted from the
+$N=100{,}000$ row would take
+\[
+0.006700\left(10\frac{\log(1{,}000{,}000)}
+                         {\log(100{,}000)}\right)
+=0.006700(12)
+=0.0804\text{ seconds},
+\]
+which is close to the measured $0.074870$ seconds. Likewise, the linear
+prediction for Algorithm 4 is $10(0.002205)=0.02205$ seconds, close to
+the measured $0.022711$ seconds.
+
+The estimates assume that the dominant asymptotic term already controls
+the measured running time, its constant factor remains stable, and the
+same hardware, compiler, optimization settings, and input conditions are
+used. They also ignore secondary terms and effects such as caching,
+memory bandwidth, operating-system scheduling, and timer error.
+
+\subsection*{\color{sectionnavy}Exercise 2.10}
+\addcontentsline{toc}{subsection}{Exercise 2.10: Hand arithmetic complexity}
+
+\noindent
+Determine, for the typical algorithms used to perform calculations by
+hand, the running time required to do the following:
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+  \item Add two $N$-digit integers.
+  \item Multiply two $N$-digit integers.
+  \item Divide two $N$-digit integers.
+\end{enumerate}
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+Assume that a single-digit arithmetic operation, comparison, or carry
+operation takes constant time.
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+
+  \item In ordinary addition, each pair of corresponding digits is
+  processed once, together with a possible carry. Thus the running time
+  is
+  \[
+  \boxed{\Theta(N)}.
+  \]
+
+  \item In grade-school multiplication, each of the $N$ digits of one
+  number is multiplied by each of the $N$ digits of the other. Adding
+  the shifted partial products also takes at most quadratic time.
+  Therefore, the running time is
+  \[
+  \boxed{\Theta(N^2)}.
+  \]
+
+  \item Long division determines at most $N$ quotient digits. At each
+  stage, comparing with and subtracting a suitably shifted divisor can
+  require $\Theta(N)$ digit operations. Hence the running time is
+  \[
+  \boxed{\Theta(N^2)}.
+  \]
+\end{enumerate}
+
+These bounds describe the usual hand algorithms; faster multiplication
+and division algorithms exist for sufficiently large inputs.
+
+\subsection*{\color{sectionnavy}Exercise 2.11}
+\addcontentsline{toc}{subsection}{Exercise 2.11: Scaling runtime with input size}
+
+\noindent
+An algorithm takes $0.5$ ms for input size $100$. How long will it take
+for input size $500$ if the running time is the following (assume
+low-order terms are negligible)?
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+  \item Linear
+  \item $O(N\log N)$
+  \item Quadratic
+  \item Cubic
+\end{enumerate}
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+The input size increases by a factor of
+\[
+\frac{500}{100}=5.
+\]
+Scale the original $0.5$ ms running time according to each growth rate.
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+
+  \item For linear time, the multiplication factor is $5$:
+  \[
+  0.5(5)=\boxed{2.5\text{ ms}}.
+  \]
+
+  \item For $N\log N$, the multiplication factor is
+  \[
+  \frac{500\log 500}{100\log 100}
+  =5\frac{\log 500}{\log 100}
+  \approx 6.747.
+  \]
+  Therefore, the estimated time is
+  \[
+  0.5(6.747)\approx\boxed{3.37\text{ ms}}.
+  \]
+
+  \item For quadratic time, the multiplication factor is $5^2=25$:
+  \[
+  0.5(25)=\boxed{12.5\text{ ms}}.
+  \]
+
+  \item For cubic time, the multiplication factor is $5^3=125$:
+  \[
+  0.5(125)=\boxed{62.5\text{ ms}}.
+  \]
+\end{enumerate}
+
+\subsection*{\color{sectionnavy}Exercise 2.12}
+\addcontentsline{toc}{subsection}{Exercise 2.12: Problem size under a time limit}
+
+\noindent
+An algorithm takes $0.5$ ms for input size $100$. How large a problem
+can be solved in $1$ min if the running time is the following (assume
+low-order terms are negligible)?
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+  \item Linear
+  \item $O(N\log N)$
+  \item Quadratic
+  \item Cubic
+\end{enumerate}
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+One minute is $60{,}000$ ms, so the available time is larger by the
+factor
+\[
+R=\frac{60{,}000}{0.5}=120{,}000.
+\]
+If $T(N)=c f(N)$, we therefore solve
+\[
+\frac{f(N)}{f(100)}=120{,}000.
+\]
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+
+  \item For linear time,
+  \[
+  \frac{N}{100}=120{,}000,
+  \qquad
+  \boxed{N=12{,}000{,}000}.
+  \]
+
+  \item For $N\log N$ time, $N$ satisfies
+  \[
+  \frac{N\log N}{100\log 100}=120{,}000.
+  \]
+  Solving this equation numerically gives
+  \[
+  N\approx3{,}656{,}807,
+  \]
+  so the largest integral input size is approximately
+  \[
+  \boxed{N\approx3.66\times10^6}.
+  \]
+
+  \item For quadratic time,
+  \[
+  \left(\frac{N}{100}\right)^2=120{,}000,
+  \qquad
+  N=100\sqrt{120{,}000}\approx34{,}641.
+  \]
+  Thus,
+  \[
+  \boxed{N\approx34{,}641}.
+  \]
+
+  \item For cubic time,
+  \[
+  \left(\frac{N}{100}\right)^3=120{,}000,
+  \qquad
+  N=100\sqrt[3]{120{,}000}\approx4{,}932.
+  \]
+  Thus,
+  \[
+  \boxed{N\approx4{,}932}.
+  \]
+\end{enumerate}
+
+\subsection*{\color{sectionnavy}Exercise 2.13}
+\addcontentsline{toc}{subsection}{Exercise 2.13: Polynomial evaluation by powers}
+
+\noindent
+How much time is required to compute
+$f(x)=\sum_{i=0}^{N}a_i x^i$?
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+  \item Using a simple routine to perform exponentiation?
+  \item Using the routine in Section 2.4.4?
+\end{enumerate}
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+Assume that each power $x^i$ is computed independently and that each
+arithmetic operation takes constant time.
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+
+  \item A simple exponentiation routine computes $x^i$ using
+  $i-1=\Theta(i)$ multiplications. Thus the total work is
+  \[
+  \sum_{i=0}^{N}\Theta(i)=\Theta(N^2).
+  \]
+  The additional $N+1$ coefficient multiplications and additions do not
+  change the bound, so the running time is
+  \[
+  \boxed{\Theta(N^2)}.
+  \]
+
+  \item The fast exponentiation routine from Section 2.4.4 computes
+  $x^i$ in $\Theta(\log i)$ time. Computing all powers independently
+  therefore requires
+  \[
+  \sum_{i=1}^{N}\Theta(\log i)
+  =\Theta(\log(N!))
+  =\Theta(N\log N).
+  \]
+  Hence the total running time is
+  \[
+  \boxed{\Theta(N\log N)}.
+  \]
+\end{enumerate}
+
+\subsection*{\color{sectionnavy}Exercise 2.14}
+\addcontentsline{toc}{subsection}{Exercise 2.14: Horner's rule}
+
+\noindent
+Consider the following algorithm (known as Horner's rule) to evaluate
+$f(x)=\sum_{i=0}^{N}a_i x^i$:
+
+\begin{lstlisting}
+poly = 0;
+for (i = n; i >= 0; --i)
+    poly = x * poly + a[i];
+\end{lstlisting}
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+  \item Show how the steps are performed by this algorithm for $x=3$,
+  $f(x)=4x^4+8x^3+x+2$.
+  \item Explain why this algorithm works.
+  \item What is the running time of this algorithm?
+\end{enumerate}
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+The coefficients in ascending order are
+\[
+a_0=2,\quad a_1=1,\quad a_2=0,\quad a_3=8,\quad a_4=4.
+\]
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+
+  \item Starting with \texttt{poly = 0}, the iterations give
+  \[
+  \begin{array}{c|c}
+  i & \texttt{poly}=3(\texttt{poly})+a_i \\
+  \hline
+  4 & 3(0)+4=4 \\
+  3 & 3(4)+8=20 \\
+  2 & 3(20)+0=60 \\
+  1 & 3(60)+1=181 \\
+  0 & 3(181)+2=545
+  \end{array}
+  \]
+  Therefore,
+  \[
+  \boxed{f(3)=545}.
+  \]
+
+  \item The polynomial can be written in nested form as
+  \[
+  f(x)=a_0+x\bigl(a_1+x\bigl(a_2+\cdots
+       +x(a_{N-1}+xa_N)\cdots\bigr)\bigr).
+  \]
+  After processing coefficient $a_i$, the variable \texttt{poly}
+  contains
+  \[
+  a_i+a_{i+1}x+a_{i+2}x^2+\cdots+a_Nx^{N-i}.
+  \]
+  The assignment \texttt{poly = x * poly + a[i]} constructs this
+  expression one coefficient at a time, so after the final iteration it
+  equals the original polynomial $f(x)$.
+
+  \item The loop executes exactly $N+1$ times, with one multiplication
+  and one addition per iteration. Hence its running time is
+  \[
+  \boxed{\Theta(N)}.
+  \]
+\end{enumerate}
+
+\subsection*{\color{sectionnavy}Exercise 2.15}
+\addcontentsline{toc}{subsection}{Exercise 2.15: Finding a fixed point in an array}
+
+\noindent
+Give an efficient algorithm to determine if there exists an integer
+$i$ such that $A_i=i$ in an array of integers
+$A_1<A_2<A_3<\cdots<A_N$. What is the running time of your algorithm?
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+Use binary search on the index. With the array indexed from $1$ through
+$N$, the algorithm is:
+
+\begin{lstlisting}
+bool hasFixedPoint(const vector<int>& a) {
+    int low = 1;
+    int high = static_cast<int>(a.size()) - 1;
+
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+        if (a[mid] == mid)
+            return true;
+        if (a[mid] < mid)
+            low = mid + 1;
+        else
+            high = mid - 1;
+    }
+    return false;
+}
+\end{lstlisting}
+
+To justify the discarded halves, suppose first that $A_{\mathit{mid}}<
+\mathit{mid}$. Because the entries are strictly increasing integers,
+for every $j<\mathit{mid}$,
+\[
+A_j\leq A_{\mathit{mid}}-(\mathit{mid}-j)<j.
+\]
+Thus no index to the left can satisfy $A_j=j$. Similarly, if
+$A_{\mathit{mid}}>\mathit{mid}$, then for every $j>\mathit{mid}$,
+\[
+A_j\geq A_{\mathit{mid}}+(j-\mathit{mid})>j,
+\]
+so no index to the right can be a solution.
+
+Each comparison eliminates at least half of the remaining indices.
+Therefore, the running time is
+\[
+\boxed{\Theta(\log N)},
+\]
+with $\Theta(1)$ auxiliary space for the iterative implementation.
+
+\subsection*{\color{sectionnavy}Exercise 2.16}
+\addcontentsline{toc}{subsection}{Exercise 2.16: The binary GCD algorithm}
+
+\noindent
+Write an alternative gcd algorithm based on the following observations
+(arrange so that $a>b$):
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+  \item $\gcd(a,b)=2\gcd(a/2,b/2)$ if $a$ and $b$ are both even.
+  \item $\gcd(a,b)=\gcd(a/2,b)$ if $a$ is even and $b$ is odd.
+  \item $\gcd(a,b)=\gcd(a,b/2)$ if $a$ is odd and $b$ is even.
+  \item $\gcd(a,b)=\gcd((a+b)/2,(a-b)/2)$ if $a$ and $b$ are both
+  odd.
+\end{enumerate}
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+The following recursive implementation is a form of the binary gcd
+algorithm. The expression used for $(a+b)/2$ avoids overflow from
+forming $a+b$ directly.
+
+\begin{lstlisting}
+#include <cstdint>
+#include <utility>
+
+std::uint64_t binaryGcd(std::uint64_t a, std::uint64_t b) {
+    if (a == 0) return b;
+    if (b == 0) return a;
+    if (a < b) std::swap(a, b);
+    if (a == b) return a;
+
+    bool aEven = (a % 2 == 0);
+    bool bEven = (b % 2 == 0);
+
+    if (aEven && bEven)
+        return 2 * binaryGcd(a / 2, b / 2);
+    if (aEven)
+        return binaryGcd(a / 2, b);
+    if (bEven)
+        return binaryGcd(a, b / 2);
+
+    // Both are odd and a > b.
+    return binaryGcd(b + (a - b) / 2, (a - b) / 2);
+}
+\end{lstlisting}
+
+The first identity removes a common factor of $2$. In the second and
+third cases, an odd number cannot share a factor of $2$ with the even
+number, so dividing the even argument by $2$ does not change the gcd.
+
+For the final case, define
+\[
+u=\frac{a+b}{2},\qquad v=\frac{a-b}{2}.
+\]
+Then $a=u+v$ and $b=u-v$. Consequently, every common divisor of $u$
+and $v$ divides both $a$ and $b$. Conversely, since $a$ and $b$ are
+odd, their gcd is odd and divides both $(a+b)/2$ and $(a-b)/2$.
+Therefore $\gcd(a,b)=\gcd(u,v)$.
+
+Each call either halves an even argument or replaces two odd arguments
+by values formed from their half-sum and half-difference. After at most
+a constant number of calls, the magnitude of the arguments decreases
+by a constant factor. Under the usual unit-cost arithmetic model, the
+worst-case running time is therefore
+\[
+\boxed{\Theta(\log \max(a,b))}.
+\]
+The recursion also uses $\Theta(\log \max(a,b))$ stack space; an
+iterative version can use constant auxiliary space.
+
+\subsection*{\color{sectionnavy}Exercise 2.17}
+\addcontentsline{toc}{subsection}{Exercise 2.17: Subsequence sums and products}
+
+\noindent
+Give efficient algorithms (along with running-time analyses) to:
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+  \item Find the minimum subsequence sum.
+  \item Find the minimum positive subsequence sum.
+  \item Find the maximum subsequence product.
+\end{enumerate}
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+Here, a subsequence means a contiguous subsequence.
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+
+  \item This is the minimum-sum version of Kadane's algorithm. If the
+  empty subsequence is permitted, initialize both values to zero.
+
+\begin{lstlisting}
+long long minimumSubsequenceSum(const vector<int>& a) {
+    long long endingHere = 0;
+    long long minimumSum = 0;
+
+    for (int x : a) {
+        endingHere = std::min(0LL, endingHere + x);
+        minimumSum = std::min(minimumSum, endingHere);
+    }
+    return minimumSum;
+}
+\end{lstlisting}
+
+  Each element is processed once, so the running time is
+  $\boxed{\Theta(N)}$ and the auxiliary space is $\Theta(1)$.
+
+  \item Let the prefix sums be
+  \[
+  P_0=0,\qquad P_j=\sum_{k=1}^{j}A_k.
+  \]
+  A subsequence from $i+1$ through $j$ has sum $P_j-P_i$. For each
+  $P_j$, the smallest positive difference is obtained by choosing the
+  largest earlier prefix sum that is strictly less than $P_j$.
+  Maintain all earlier prefix sums in an ordered set and perform a
+  predecessor query for every $P_j$.
+
+\begin{lstlisting}
+long long minimumPositiveSubsequenceSum(const vector<int>& a) {
+    std::set<long long> earlier{0};
+    long long prefix = 0;
+    long long answer = std::numeric_limits<long long>::max();
+
+    for (int x : a) {
+        prefix += x;
+        auto it = earlier.lower_bound(prefix);
+        if (it != earlier.begin()) {
+            --it;
+            answer = std::min(answer, prefix - *it);
+        }
+        earlier.insert(prefix);
+    }
+    return answer; // No answer if this remains LLONG_MAX.
+}
+\end{lstlisting}
+
+  Each ordered-set operation takes $O(\log N)$ time, so the total is
+  $\boxed{O(N\log N)}$ time and $O(N)$ space.
+
+  \item A negative value can turn the smallest product ending at the
+  previous position into the largest. Therefore, keep both the maximum
+  and minimum products ending at the current position.
+
+\begin{lstlisting}
+long long maximumSubsequenceProduct(const vector<int>& a) {
+    long long maximumEnding = a[0];
+    long long minimumEnding = a[0];
+    long long answer = a[0];
+
+    for (std::size_t i = 1; i < a.size(); ++i) {
+        long long x = a[i];
+        if (x < 0)
+            std::swap(maximumEnding, minimumEnding);
+
+        maximumEnding = std::max(x, x * maximumEnding);
+        minimumEnding = std::min(x, x * minimumEnding);
+        answer = std::max(answer, maximumEnding);
+    }
+    return answer;
+}
+\end{lstlisting}
+
+  This algorithm takes $\boxed{\Theta(N)}$ time and $\Theta(1)$
+  auxiliary space. The numeric type must be large enough to avoid
+  overflow.
+\end{enumerate}
+
+\subsection*{\color{sectionnavy}Exercise 2.18}
+\addcontentsline{toc}{subsection}{Exercise 2.18: Root finding by bisection}
+
+\noindent
+An important problem in numerical analysis is to find a solution to
+$f(x)=0$ for an arbitrary continuous function $f$. If $f(\mathit{low})$
+and $f(\mathit{high})$ have opposite signs, write a function that uses
+binary search to solve for a zero. What must be done to ensure
+termination?
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+The bisection method repeatedly keeps the half-interval whose endpoint
+values have opposite signs.
+
+\begin{lstlisting}
+double findZero(const std::function<double(double)>& f,
+                double low, double high,
+                double xTolerance = 1e-12,
+                double fTolerance = 1e-12) {
+    double fLow = f(low);
+    double fHigh = f(high);
+
+    if (std::abs(fLow) <= fTolerance) return low;
+    if (std::abs(fHigh) <= fTolerance) return high;
+    if (std::signbit(fLow) == std::signbit(fHigh))
+        throw std::invalid_argument("root is not bracketed");
+
+    for (int iteration = 0; iteration < 200; ++iteration) {
+        double mid = low + (high - low) / 2.0;
+        double fMid = f(mid);
+
+        if (std::abs(fMid) <= fTolerance ||
+            high - low <= xTolerance ||
+            mid == low || mid == high)
+            return mid;
+
+        if (std::signbit(fLow) != std::signbit(fMid)) {
+            high = mid;
+        } else {
+            low = mid;
+            fLow = fMid;
+        }
+    }
+    return low + (high - low) / 2.0;
+}
+\end{lstlisting}
+
+Testing only whether $f(\mathit{mid})=0$ does not guarantee termination,
+because a floating-point computation may never produce the exact root.
+Termination must instead be based on a tolerance for the interval or
+function value, together with a maximum iteration count. After $k$
+iterations the interval width is $(\mathit{high}-\mathit{low})/2^k$, so
+an $x$-accuracy of $\varepsilon$ requires
+\[
+\boxed{O\!\left(\log\frac{\mathit{high}-\mathit{low}}{\varepsilon}
+       \right)}
+\]
+function evaluations.
+
+\subsection*{\color{sectionnavy}Exercise 2.19}
+\addcontentsline{toc}{subsection}{Exercise 2.19: Returning subsequence endpoints}
+
+\noindent
+Modify the maximum contiguous subsequence sum algorithms so that they
+return, in a single object, both the maximum sum and the indices of the
+actual subsequence.
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+Store the sum and its two endpoints in a result object. The linear-time
+algorithm becomes:
+
+\begin{lstlisting}
+struct SubsequenceResult {
+    long long sum;
+    int first;
+    int last;
+};
+
+SubsequenceResult maximumSubsequence(const vector<int>& a) {
+    SubsequenceResult best{0, -1, -1};
+    long long currentSum = 0;
+    int currentFirst = 0;
+
+    for (int i = 0; i < static_cast<int>(a.size()); ++i) {
+        currentSum += a[i];
+
+        if (currentSum > best.sum)
+            best = {currentSum, currentFirst, i};
+
+        if (currentSum < 0) {
+            currentSum = 0;
+            currentFirst = i + 1;
+        }
+    }
+    return best;
+}
+\end{lstlisting}
+
+The indices $(-1,-1)$ represent the empty subsequence when all entries
+are negative. The running time remains $\boxed{\Theta(N)}$, since only
+constant additional work is performed per element.
+
+The same idea applies to the other algorithms in the text. In the
+cubic and quadratic versions, record the current $i$ and $j$ whenever a
+new maximum is found. In the divide-and-conquer version, each recursive
+call returns a \texttt{SubsequenceResult}; the left, right, and crossing
+results are constructed with their endpoints, and the one with the
+largest sum is returned. These additions do not change their respective
+asymptotic running times.
+
+\subsection*{\color{sectionnavy}Exercise 2.20}
+\addcontentsline{toc}{subsection}{Exercise 2.20: Trial division and input bits}
+
+\noindent
+Consider a program that determines whether a positive integer $N$ is
+prime.
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+  \item Write the program.
+  \item Give its worst-case running time in terms of $N$.
+  \item Let $B$ be the number of bits in the binary representation of
+  $N$. What is $B$?
+  \item Give the worst-case running time in terms of $B$.
+  \item Compare testing a 20-bit number and a 40-bit number.
+  \item Is it more reasonable to state the running time in terms of
+  $N$ or $B$? Why?
+\end{enumerate}
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+
+  \item It is sufficient to test possible divisors through $\sqrt N$.
+  The comparison $d\leq N/d$ avoids overflow from computing $d^2$.
+
+\begin{lstlisting}
+bool isPrime(std::uint64_t n) {
+    if (n < 2) return false;
+    if (n % 2 == 0) return n == 2;
+
+    for (std::uint64_t d = 3; d <= n / d; d += 2)
+        if (n % d == 0)
+            return false;
+    return true;
+}
+\end{lstlisting}
+
+  If $N$ is composite, it has a factor no larger than $\sqrt N$; if no
+  such factor is found, $N$ is prime.
+
+  \item In the worst case, such as when $N$ is prime, the program tests
+  $\Theta(\sqrt N)$ possible divisors. Under the unit-cost arithmetic
+  assumption, its running time is
+  \[
+  \boxed{\Theta(\sqrt N)}.
+  \]
+
+  \item For $N\geq1$, the binary input length is
+  \[
+  \boxed{B=\lfloor\log_2N\rfloor+1}.
+  \]
+
+  \item Since $N$ can be approximately $2^B$,
+  \[
+  \sqrt N=\Theta(2^{B/2}).
+  \]
+  Thus the unit-cost running time in terms of the input length is
+  \[
+  \boxed{\Theta(2^{B/2})},
+  \]
+  which is exponential in $B$. Accounting for the bit cost of division
+  would add a polynomial factor in $B$.
+
+  \item A 20-bit number has square root on the order of $2^{10}$,
+  whereas a 40-bit number has square root on the order of $2^{20}$.
+  Therefore the 40-bit test can require approximately
+  \[
+  \frac{2^{20}}{2^{10}}=\boxed{1024}
+  \]
+  times as many trial divisions.
+
+  \item It is more informative to express the running time in terms of
+  $B$, because $B$ is the actual size of the input representation. The
+  bound $\Theta(\sqrt N)$ can appear moderate, while the equivalent
+  $\Theta(2^{B/2})$ correctly reveals that trial division is exponential
+  in the number of input bits.
+\end{enumerate}
+
+\subsection*{\color{sectionnavy}Exercise 2.21}
+\addcontentsline{toc}{subsection}{Exercise 2.21: Sieve of Eratosthenes complexity}
+
+\noindent
+The Sieve of Eratosthenes computes all primes less than $N$ by crossing
+out multiples of each uncrossed integer through $\sqrt N$. What is its
+running time?
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+Initializing and scanning the Boolean table takes $\Theta(N)$ time. For
+each prime $p\leq\sqrt N$, crossing out its multiples performs at most
+$N/p$ operations. Hence the total marking work is
+\[
+\sum_{\substack{p\leq\sqrt N\\p\text{ prime}}}\frac{N}{p}
+=N\sum_{p\leq\sqrt N}\frac1p.
+\]
+The sum of the reciprocals of the primes up to $x$ is
+$\Theta(\log\log x)$, so
+\[
+N\sum_{p\leq\sqrt N}\frac1p
+=\Theta(N\log\log N).
+\]
+The linear initialization and scan are dominated by this term.
+Therefore, assuming constant-time table operations, the running time is
+\[
+\boxed{\Theta(N\log\log N)},
+\]
+and the table requires $\boxed{\Theta(N)}$ space.
+
+\subsection*{\color{sectionnavy}Exercise 2.22}
+\addcontentsline{toc}{subsection}{Exercise 2.22: Computing a power efficiently}
+
+\noindent
+Show that $X^{62}$ can be computed with only eight multiplications.
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+Use the following addition chain for the exponents:
+\[
+1,\ 2,\ 3,\ 5,\ 10,\ 20,\ 30,\ 31,\ 62.
+\]
+It gives the computation
+\[
+\begin{aligned}
+X^2   &=X\cdot X,                 &
+X^3   &=X^2\cdot X,\\
+X^5   &=X^3\cdot X^2,             &
+X^{10}&=X^5\cdot X^5,\\
+X^{20}&=X^{10}\cdot X^{10},       &
+X^{30}&=X^{20}\cdot X^{10},\\
+X^{31}&=X^{30}\cdot X,            &
+X^{62}&=X^{31}\cdot X^{31}.
+\end{aligned}
+\]
+Each line contains one multiplication, for a total of exactly
+\[
+\boxed{8\text{ multiplications}}.
+\]
+
+\subsection*{\color{sectionnavy}Exercise 2.23}
+\addcontentsline{toc}{subsection}{Exercise 2.23: Iterative fast exponentiation}
+
+\noindent
+Write the fast exponentiation routine without recursion.
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+The exponent can be processed from its most significant binary digit to
+its least significant digit. The leading digit is always $1$, so the
+initial value is $x$.
+
+\begin{lstlisting}
+long long power(long long x, unsigned int n) {
+    if (n == 0)
+        return 1;
+
+    unsigned int mask = 1;
+    while (mask <= n / 2)
+        mask <<= 1;              // Highest power of two <= n.
+
+    long long result = x;        // Process the leading 1 bit.
+    mask >>= 1;
+
+    while (mask != 0) {
+        result *= result;
+        if ((n & mask) != 0)
+            result *= x;
+        mask >>= 1;
+    }
+    return result;
+}
+\end{lstlisting}
+
+Squaring shifts the already processed binary exponent one position to
+the left; multiplying by $x$ appends a $1$ bit. Since the number of bits
+in $n$ is $\Theta(\log n)$, the running time is
+\[
+\boxed{\Theta(\log n)}.
+\]
+
+\subsection*{\color{sectionnavy}Exercise 2.24}
+\addcontentsline{toc}{subsection}{Exercise 2.24: Counting exponentiation multiplications}
+
+\noindent
+Give a precise count of the number of multiplications used by the fast
+exponentiation routine.
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+Let
+\[
+n=(b_kb_{k-1}\cdots b_1b_0)_2,
+\qquad b_k=1,
+\]
+and let $s(n)$ denote the number of $1$ bits in this binary
+representation. There are
+\[
+k=\lfloor\log_2 n\rfloor
+\]
+bits after the leading bit. Processing each of them requires one
+squaring, giving $k$ multiplications. Every remaining $1$ bit also
+requires one multiplication by $x$, giving $s(n)-1$ additional
+multiplications. Thus, for $n\geq1$, the precise count is
+\[
+\boxed{M(n)=\lfloor\log_2 n\rfloor+s(n)-1}.
+\]
+For $n=0$, no multiplication is required. Since
+$1\leq s(n)\leq\lfloor\log_2n\rfloor+1$, this count lies between
+\[
+\lfloor\log_2n\rfloor
+\quad\text{and}\quad
+2\lfloor\log_2n\rfloor,
+\]
+confirming the $\Theta(\log n)$ bound. For example, $62=(111110)_2$,
+so this routine uses $5+5-1=9$ multiplications; the specially chosen
+addition chain in Exercise 2.22 improves this to eight.
+
+\subsection*{\color{sectionnavy}Exercise 2.25}
+\addcontentsline{toc}{subsection}{Exercise 2.25: Comparing runtime guarantees}
+
+\noindent
+Programs $A$ and $B$ have worst-case running times no greater than
+$150N\log_2N$ and $N^2$, respectively. Answer the following questions,
+if possible.
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+  \item Which program has the better guarantee for large values
+  ($N>10{,}000$)?
+  \item Which program has the better guarantee for small values
+  ($N<100$)?
+  \item Which program will run faster on average for $N=1{,}000$?
+  \item Is it possible that program $B$ runs faster than program $A$ on
+  all possible inputs?
+\end{enumerate}
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+Compare the two stated upper bounds by cancelling the positive factor
+$N$:
+\[
+150N\log_2N<N^2
+\quad\Longleftrightarrow\quad
+150\log_2N<N.
+\]
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+
+  \item At $N=10{,}000$,
+  \[
+  150\log_2(10{,}000)\approx1{,}993<10{,}000,
+  \]
+  and the linear factor $N$ eventually grows faster than $\log N$.
+  Thus $150N\log_2N<N^2$ throughout the stated large-input range, so
+  \[
+  \boxed{\text{Program }A\text{ has the better worst-case guarantee.}}
+  \]
+
+  \item For the relevant integers $2\leq N<100$,
+  $150\log_2N>N$, and hence $N^2<150N\log_2N$. Therefore,
+  \[
+  \boxed{\text{Program }B\text{ has the better worst-case guarantee.}}
+  \]
+
+  \item This cannot be determined. The given information describes
+  only worst-case upper bounds; it provides neither average-case running
+  times nor an input distribution. Thus
+  \[
+  \boxed{\text{there is insufficient information.}}
+  \]
+
+  \item Yes. An upper bound does not state that a program actually takes
+  that much time, nor does it provide a lower bound. Program $B$ could
+  have a smaller actual running time on every input while still obeying
+  its $N^2$ upper bound. Hence
+  \[
+  \boxed{\text{yes, this is possible.}}
+  \]
+\end{enumerate}
+
+\subsection*{\color{sectionnavy}Exercise 2.26}
+\addcontentsline{toc}{subsection}{Exercise 2.26: Finding a majority element}
+
+\noindent
+A majority element in an array $A$ of size $N$ is an element that
+appears more than $N/2$ times. To find a candidate, compare adjacent
+pairs, place one copy of each equal pair in a second array $B$, discard
+unequal pairs, and recursively find a candidate in $B$. Then scan $A$
+to verify whether the candidate is actually a majority.
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+  \item How does the recursion terminate?
+  \item How is the case where $N$ is odd handled?
+  \item What is the running time of the algorithm?
+  \item How can the extra array $B$ be avoided?
+  \item Write a program to compute the majority element.
+\end{enumerate}
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+Pair cancellation is valid because discarding two unequal elements
+removes at most one occurrence of any particular value. Thus, if an
+element is a majority before the cancellation, it remains the only
+possible majority candidate afterward.
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+
+  \item The recursion stops when the current array has zero or one
+  element. An empty array has no candidate, while the sole element of a
+  one-element array is its candidate. The recursion also stops if a
+  pairing step produces an empty array.
+
+  \item Let $N=2k+1$ and temporarily leave the final element $z$
+  unpaired. Form $B$ from the first $2k$ elements and recursively obtain
+  its candidate, if one exists. There are then at most two candidates
+  that must be checked in the original array: the candidate from $B$
+  and $z$.
+
+  To see why, suppose the true majority is $x$. If $z\neq x$, then all
+  of the more than $N/2$ copies of $x$ occur in the first $2k$
+  positions, where $x$ is still a majority and must survive as the
+  recursive candidate. If $z=x$, the remaining copies can be exactly
+  half of the first $2k$ entries, so the recursive reduction might
+  discard them all; in that case $z$ supplies the missing candidate.
+
+  \item Forming the paired array takes $\Theta(N)$ time and leaves at
+  most $N/2$ elements. Candidate verification is another linear scan,
+  so the recurrence is
+  \[
+  T(N)=T(N/2)+\Theta(N).
+  \]
+  Expanding it gives
+  \[
+  T(N)=\Theta\left(N+\frac N2+\frac N4+\cdots\right)
+      =\boxed{\Theta(N)}.
+  \]
+  A linear lower bound is unavoidable because an element near the end
+  can change whether a candidate has a strict majority.
+
+  \item The equal-pair representatives can be written into the
+  beginning of $A$ itself. Maintain a write index, scan the current
+  prefix two elements at a time, and copy one member of every equal pair
+  to \texttt{A[write++]}. The recursive call then operates only on this
+  shortened prefix. This removes the auxiliary array, although the
+  recursive version still uses $O(\log N)$ stack space.
+
+  An even simpler constant-space implementation uses the equivalent
+  Boyer--Moore cancellation process: keep one candidate and a balance,
+  cancelling each occurrence of a different value against one
+  occurrence of the candidate.
+
+  \item The candidate produced by cancellation must be verified because
+  an array need not contain any majority element.
+
+\begin{lstlisting}
+#include <optional>
+#include <vector>
+
+std::optional<int> majorityElement(const std::vector<int>& a) {
+    if (a.empty())
+        return std::nullopt;
+
+    int candidate = 0;
+    int balance = 0;
+
+    for (int value : a) {
+        if (balance == 0) {
+            candidate = value;
+            balance = 1;
+        } else if (value == candidate) {
+            ++balance;
+        } else {
+            --balance;
+        }
+    }
+
+    std::size_t occurrences = 0;
+    for (int value : a)
+        if (value == candidate)
+            ++occurrences;
+
+    if (occurrences > a.size() / 2)
+        return candidate;
+    return std::nullopt;
+}
+\end{lstlisting}
+
+  The first scan finds the only possible candidate and the second scan
+  verifies it. The program therefore uses $\boxed{\Theta(N)}$ time and
+  $\boxed{\Theta(1)}$ auxiliary space.
+\end{enumerate}
+
+\subsection*{\color{sectionnavy}Exercise 2.27}
+\addcontentsline{toc}{subsection}{Exercise 2.27: Searching a sorted matrix}
+
+\noindent
+The input is an $N$ by $N$ matrix already in memory. Every row is
+increasing from left to right, and every column is increasing from top
+to bottom. Give an $O(N)$ worst-case algorithm that determines whether
+a number $X$ occurs in the matrix.
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+Begin at the upper-right corner. If the current element is larger than
+$X$, move left; if it is smaller than $X$, move down.
+
+\begin{lstlisting}
+bool contains(const vector<vector<int>>& matrix, int x) {
+    int n = static_cast<int>(matrix.size());
+    int row = 0;
+    int column = n - 1;
+
+    while (row < n && column >= 0) {
+        if (matrix[row][column] == x)
+            return true;
+        if (matrix[row][column] > x)
+            --column;
+        else
+            ++row;
+    }
+    return false;
+}
+\end{lstlisting}
+
+If the current value is greater than $X$, every element below it in the
+same column is still larger, so that column can be discarded. If the
+current value is less than $X$, every element to its left in the same
+row is still smaller, so that row can be discarded. Thus every move
+eliminates one complete row or column without discarding a possible
+match.
+
+There are at most $N$ downward moves and $N$ leftward moves, so the
+algorithm performs at most $2N-1$ comparisons. Its worst-case running
+time is therefore
+\[
+\boxed{\Theta(N)},
+\]
+with $\Theta(1)$ auxiliary space.
+
+\subsection*{\color{sectionnavy}Exercise 2.28}
+\addcontentsline{toc}{subsection}{Exercise 2.28: Optimizing ordered array pairs}
+
+\noindent
+Design efficient algorithms that take an array of positive numbers
+$a$ and determine, subject to $j\geq i$, the maximum value of:
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+  \item $a[j]+a[i]$
+  \item $a[j]-a[i]$
+  \item $a[j]a[i]$
+  \item $a[j]/a[i]$
+\end{enumerate}
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+For each position $j$, maintain the minimum and maximum values in the
+prefix $a[0],\ldots,a[j]$. This ensures that the chosen index $i$ always
+satisfies $i\leq j$.
+
+\begin{lstlisting}
+struct PairExtrema {
+    double maximumSum;
+    double maximumDifference;
+    double maximumProduct;
+    double maximumRatio;
+};
+
+PairExtrema findExtrema(const vector<double>& a) {
+    double prefixMinimum = a[0];
+    double prefixMaximum = a[0];
+
+    PairExtrema answer{
+        2 * a[0], 0.0, a[0] * a[0], 1.0
+    };
+
+    for (double value : a) {
+        prefixMinimum = std::min(prefixMinimum, value);
+        prefixMaximum = std::max(prefixMaximum, value);
+
+        answer.maximumSum = std::max(
+            answer.maximumSum, value + prefixMaximum);
+        answer.maximumDifference = std::max(
+            answer.maximumDifference, value - prefixMinimum);
+        answer.maximumProduct = std::max(
+            answer.maximumProduct, value * prefixMaximum);
+        answer.maximumRatio = std::max(
+            answer.maximumRatio, value / prefixMinimum);
+    }
+    return answer;
+}
+\end{lstlisting}
+
+Because $i=j$ is allowed and all values are positive, parts (a) and
+(c) simplify to
+\[
+\boxed{2\max_k a[k]}
+\qquad\text{and}\qquad
+\boxed{\left(\max_k a[k]\right)^2},
+\]
+respectively. For each fixed $j$, the best choice in part (b) is the
+smallest earlier value, giving
+\[
+\boxed{\max_j\left(a[j]-\min_{i\leq j}a[i]\right)},
+\]
+and positivity makes the same prefix minimum the best denominator in
+part (d):
+\[
+\boxed{\max_j\left(\frac{a[j]}{\min_{i\leq j}a[i]}\right)}.
+\]
+All four answers are obtained in one pass, so the running time is
+$\boxed{\Theta(N)}$ and the auxiliary space is $\boxed{\Theta(1)}$.
+
+\subsection*{\color{sectionnavy}Exercise 2.29}
+\addcontentsline{toc}{subsection}{Exercise 2.29: Fixed-size integer assumptions}
+
+\noindent
+Why is it important to assume that integers in our computer model have
+a fixed size?
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+The usual RAM model counts an integer arithmetic operation, comparison,
+assignment, or memory access as taking constant time. This is realistic
+only when every integer fits in a fixed-size machine word.
+
+If integers could contain arbitrarily many bits while addition,
+multiplication, division, and comparison were still charged constant
+time, a single ``integer operation'' could process an unbounded amount
+of information. For example, an entire long input could be encoded in
+one enormous integer, and the model would incorrectly treat operations
+on that encoding as taking the same time as operations on a small
+integer.
+
+With arbitrary-precision integers, the cost must instead depend on the
+operand length. Addition of two $B$-bit integers takes $\Theta(B)$ time
+with the ordinary method, while multiplication and division require
+still more work. The input size of a numerical value $N$ is also
+$\Theta(\log N)$ bits rather than $N$ itself.
+
+Therefore, the fixed-size assumption keeps constant-time primitive
+operations and the resulting running-time analyses meaningful. When
+values can grow beyond a machine word, their bit lengths must be
+included explicitly in the analysis.
+
+\subsection*{\color{sectionnavy}Exercise 2.30}
+\addcontentsline{toc}{subsection}{Exercise 2.30: Word-puzzle search complexity}
+
+\noindent
+Consider the word-puzzle problem from Chapter 1. Suppose the length of
+the longest word is fixed at 10 characters.
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+  \item In terms of $R$ and $C$, the numbers of rows and columns, and
+  $W$, the number of words, what are the running times of the algorithms
+  described in Chapter 1?
+  \item Suppose the word list is presorted. Show how binary search gives
+  an algorithm with significantly better running time.
+\end{enumerate}
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+There are eight possible directions from any starting cell. Since the
+maximum word length is the fixed constant 10, checking or constructing
+one possible word takes $O(1)$ time.
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\alph{enumi}.}
+
+  \item The first algorithm considers each of the $W$ dictionary words
+  at every one of the $RC$ starting cells and in each of the eight
+  directions. A comparison examines at most 10 characters. Therefore,
+  \[
+  T_1(R,C,W)=O(8\cdot10\cdot RCW)
+            =\boxed{O(RCW)}.
+  \]
+
+  The second algorithm considers each starting cell, each direction,
+  and each possible length from 1 through 10. This produces only
+  $O(8\cdot10\cdot RC)=O(RC)$ candidate strings. Testing a candidate by
+  a sequential scan of the $W$-word list takes $O(W)$ time, so
+  \[
+  T_2(R,C,W)=O(RC\cdot W)=\boxed{O(RCW)}.
+  \]
+
+  Thus the two straightforward algorithms have the same asymptotic
+  worst-case bound when the maximum word length is fixed, although their
+  constant factors can differ.
+
+  \item Use the second algorithm, but look up each generated candidate
+  string with binary search in the sorted word list. A lookup now takes
+  $O(\log W)$ comparisons rather than $O(W)$ comparisons.
+
+\begin{lstlisting}
+for each cell (row, column)
+    for each of the 8 directions
+        word = ""
+        for length = 1 to 10
+            if the next cell is outside the board
+                break
+            append the next character to word
+            if binarySearch(dictionary, word)
+                report word
+\end{lstlisting}
+
+  There are $O(RC)$ generated strings because both the number of
+  directions and the maximum length are constants. Consequently, the
+  running time becomes
+  \[
+  \boxed{O(RC\log W)}.
+  \]
+  The word list itself can be sorted once in $O(W\log W)$ time if it is
+  not already sorted. If the same dictionary is used for many puzzles,
+  this preprocessing cost is paid only once.
+\end{enumerate}
+
+\subsection*{\color{sectionnavy}Exercise 2.31}
+\addcontentsline{toc}{subsection}{Exercise 2.31: A binary-search termination bug}
+
+\noindent
+Suppose that the binary-search routine used \texttt{low = mid} instead
+of \texttt{low = mid + 1}. Would the routine still work?
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+No. When the search interval contains two adjacent positions,
+\[
+\mathit{high}=\mathit{low}+1,
+\]
+integer division gives
+\[
+\mathit{mid}
+=\left\lfloor\frac{\mathit{low}+\mathit{high}}2\right\rfloor
+=\mathit{low}.
+\]
+If $a[\mathit{mid}]<x$, the assignment
+\texttt{low = mid} leaves \texttt{low}, \texttt{mid}, and
+\texttt{high} unchanged. The next iteration repeats exactly the same
+comparison, so the loop does not terminate.
+
+For example, searching for $4$ in $[1,3]$ first examines the element
+$1$. Setting \texttt{low = mid} keeps the interval at $[0,1]$ forever.
+The correct assignment is
+\[
+\boxed{\texttt{low = mid + 1}},
+\]
+because the comparison has already proved that position
+\texttt{mid} cannot contain the target.
+
+\subsection*{\color{sectionnavy}Exercise 2.32}
+\addcontentsline{toc}{subsection}{Exercise 2.32: Binary search with one comparison}
+
+\noindent
+Implement binary search so that only one two-way comparison is
+performed in each iteration.
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+Maintain the half-open interval $[\mathit{low},\mathit{high})$ and find
+the first position whose value is not less than $x$. Each iteration asks
+only whether \texttt{a[mid] < x}.
+
+\begin{lstlisting}
+template <typename Comparable>
+int binarySearch(const vector<Comparable>& a,
+                 const Comparable& x) {
+    int low = 0;
+    int high = static_cast<int>(a.size());
+
+    while (low < high) {
+        int mid = low + (high - low) / 2;
+
+        if (a[mid] < x)          // The only comparison in the loop.
+            low = mid + 1;
+        else
+            high = mid;
+    }
+
+    if (low < static_cast<int>(a.size()) && a[low] == x)
+        return low;
+    return -1;
+}
+\end{lstlisting}
+
+On termination, \texttt{low} is the first index at which an occurrence
+of $x$ could appear. One final equality test determines whether $x$ is
+actually present. The running time remains
+\[
+\boxed{\Theta(\log N)}.
+\]
+
+\subsection*{\color{sectionnavy}Exercise 2.33}
+\addcontentsline{toc}{subsection}{Exercise 2.33: Incorrect recursive partitioning}
+
+\noindent
+Suppose that the recursive calls in the divide-and-conquer maximum
+subsequence sum algorithm are changed to
+
+\begin{lstlisting}
+int maxLeftSum  = maxSumRec(a, left, center - 1);
+int maxRightSum = maxSumRec(a, center, right);
+\end{lstlisting}
+
+Would the routine still work?
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+No. Consider a subproblem containing exactly two elements, so that
+\[
+\mathit{right}=\mathit{left}+1.
+\]
+With the original midpoint calculation,
+\[
+\mathit{center}
+=\left\lfloor\frac{\mathit{left}+\mathit{right}}2\right\rfloor
+=\mathit{left}.
+\]
+The proposed right recursive call is then
+\[
+\operatorname{maxSumRec}(a,\mathit{center},\mathit{right})
+=\operatorname{maxSumRec}(a,\mathit{left},\mathit{right}),
+\]
+which is identical to the current call. The subproblem does not become
+smaller, so the routine recurses indefinitely and eventually exhausts
+the call stack.
+
+The original partition
+\[
+[\mathit{left},\mathit{center}]
+\quad\text{and}\quad
+[\mathit{center}+1,\mathit{right}]
+\]
+guarantees that both recursive subproblems are strictly smaller. Thus
+the proposed replacement
+\[
+\boxed{\text{does not work with the original midpoint and base case.}}
+\]
+
+\subsection*{\color{sectionnavy}Exercise 2.34}
+\addcontentsline{toc}{subsection}{Exercise 2.34: Counting nested-loop executions}
+
+\noindent
+The innermost code of the cubic maximum subsequence sum algorithm runs
+$N(N+1)(N+2)/6$ times, the quadratic version runs $N(N+1)/2$ times,
+and the linear version runs $N$ times. What pattern is evident, and what
+is its combinatorial explanation?
+
+\subsubsection*{\color{sectionnavy}Solution}
+
+The three counts are consecutive combinations with repetition:
+\[
+N=\binom{N}{1},
+\qquad
+\frac{N(N+1)}2=\binom{N+1}{2},
+\qquad
+\frac{N(N+1)(N+2)}6=\binom{N+2}{3}.
+\]
+Thus the evident pattern is
+\[
+\boxed{\binom{N+k-1}{k}}
+\]
+for $k$ nested indices constrained to occur in nondecreasing order.
+
+In the quadratic algorithm, an execution corresponds to a pair of
+indices
+\[
+0\leq i\leq j<N.
+\]
+This is the same as choosing a multiset of two indices from $N$
+possible positions, of which there are $\binom{N+1}{2}$.
+
+In the cubic algorithm, an execution of the innermost statement is
+identified by a triple
+\[
+0\leq i\leq k\leq j<N,
+\]
+where $i$ and $j$ are the subsequence endpoints and $k$ is the element
+being added. Such triples are multisets of three indices selected from
+$N$ positions, so their number is
+\[
+\binom{N+2}{3}=\frac{N(N+1)(N+2)}6.
+\]
+The linear algorithm selects only one index, giving
+$\binom{N}{1}=N$. This multiset interpretation explains all three
+formulas.
+
+\end{document}
